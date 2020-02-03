@@ -1,0 +1,12 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /kjyq
+spring:
+#  springboot热部署配置
+  devtools:
+    restart:
+      additional-paths: src/main/java
+      enabled: true
+  profiles:
+    active: zbw
