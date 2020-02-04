@@ -33,4 +33,9 @@ public class User {
     private Integer isFirstLogin;
     
     private Integer days;
+
+//    public User(String name, String avatar) {
+//        this.name = name;
+//        this.avatar = avatar;
+//    }
 }
