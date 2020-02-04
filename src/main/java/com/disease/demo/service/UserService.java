@@ -9,7 +9,7 @@ import com.disease.demo.model.dto.ResultDTO;
  */
 public interface UserService {
     
-    ResultDTO getUserInfo(String id);
+    ResultDTO getUserInfo(String id, String encryptedData, String iv, String session);
     
     ResultDTO getEpidemic(String cityName);
     

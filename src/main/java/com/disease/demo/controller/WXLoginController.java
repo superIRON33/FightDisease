@@ -3,7 +3,6 @@ package com.disease.demo.controller;
 import com.disease.demo.model.dto.ResultDTO;
 import com.disease.demo.service.WXLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

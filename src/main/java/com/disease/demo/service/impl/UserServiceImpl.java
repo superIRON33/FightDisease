@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     
     @Override
-    public ResultDTO getUserInfo(String id) {
+    public ResultDTO getUserInfo(String id, String encryptedData, String iv, String session) {
         return null;
     }
     

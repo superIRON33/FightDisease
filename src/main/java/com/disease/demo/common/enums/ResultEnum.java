@@ -35,7 +35,12 @@ public enum ResultEnum {
     /**
      * 城市不存在
      */
-    CITY_INVALID(20003, "城市不存在");
+    CITY_INVALID(20003, "城市不存在"),
+    
+    /**
+     * 解密失败
+     */
+    DECRYPTION_FAILED(20004, "解密失败");
     
     private Integer code;
     

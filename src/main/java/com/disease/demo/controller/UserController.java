@@ -18,9 +18,12 @@ public class UserController {
     private UserService userService;
     
     @GetMapping(value = "/userInfo")
-    public ResultDTO getUserInfo(@RequestParam String id) {
+    public ResultDTO getUserInfo(@RequestParam String id,
+                                 @RequestParam String encryptedData,
+                                 @RequestParam String iv,
+                                 @RequestParam String session) {
     
-        return userService.getUserInfo(id);
+        return userService.getUserInfo(id, encryptedData, iv, session);
     }
     
     @GetMapping(value = "/epidemic")
