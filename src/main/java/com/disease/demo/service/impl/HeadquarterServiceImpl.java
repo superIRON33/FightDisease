@@ -32,7 +32,7 @@ public class HeadquarterServiceImpl implements HeadquarterService {
     private HeadquarterMapper headquarterMapper;
     
     @Override
-    public ResultDTO getHeadQuarter(String id) {
+    public ResultDTO getHeadQuarter(Integer id) {
     
         Integer isFirstLogin = userMapper.findIsFirstLogin(id);
         log.info("isFirstLogin", isFirstLogin);

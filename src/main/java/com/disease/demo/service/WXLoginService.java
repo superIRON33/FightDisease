@@ -9,5 +9,5 @@ import com.disease.demo.model.dto.ResultDTO;
  */
 public interface WXLoginService {
 
-    ResultDTO login(String id, String code, String name, String avatar);
+    ResultDTO login(Integer id, String code, String name, String avatar);
 }

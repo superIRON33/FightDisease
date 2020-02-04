@@ -35,7 +35,7 @@ public class WXLoginServiceImpl implements WXLoginService {
     private UserMapper userMapper;
 
     @Override
-    public ResultDTO login(String id, String code, String name, String avatar) {
+    public ResultDTO login(Integer id, String code, String name, String avatar) {
 
         Map<String, String> param = new HashMap<>();
         param.put("appid", WechatEnum.APP_ID.getValue());
@@ -53,8 +53,8 @@ public class WXLoginServiceImpl implements WXLoginService {
             log.error("errcode:{}，errmsg: {}", jsonObject.getString("errcode"), jsonObject.getString("errmsg"));
             return new ResultDTO(ResultEnum.INTERFACE_FAIL);
         }
-        Map<String, String> res = new HashMap<>();
-        if (!StringUtil.isNullOrEmpty(id)) {
+        Map<String, Object> res = new HashMap<>();
+        if (id.equals(null)) {
             Optional<User> user = userMapper.findUserById(id);
             if (user.isPresent()) {
                 userMapper.updateUser(id, name, avatar);

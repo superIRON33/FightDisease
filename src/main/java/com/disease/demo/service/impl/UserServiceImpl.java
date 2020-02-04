@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     
     @Override
-    public ResultDTO getUserInfo(String id, String encryptedData, String iv, String session) {
+    public ResultDTO getUserInfo(Integer id, String encryptedData, String iv, String session) {
         return null;
     }
     
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public ResultDTO updateIntegral(String id, Integer integral, Integer mode) {
+    public ResultDTO updateIntegral(Integer id, Integer integral, Integer mode) {
     
         Optional<User> user = userMapper.findUserById(id);
         if (user.isPresent()) {
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public ResultDTO getHonour(String id) {
+    public ResultDTO getHonour(Integer id) {
         
         Optional<User> user = userMapper.findUserById(id);
         if (user.isPresent()) {
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public ResultDTO updateStatus(String id) {
+    public ResultDTO updateStatus(Integer id) {
     
         Integer isFirstLogin = userMapper.findIsFirstLogin(id);
         if (isFirstLogin.equals(VariableEnum.DELETE.getValue())) {

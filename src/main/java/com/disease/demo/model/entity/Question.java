@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class Question {
     
-    private String id;
+    private Integer id;
     
     private String name;
     

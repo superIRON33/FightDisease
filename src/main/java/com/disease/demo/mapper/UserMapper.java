@@ -1,11 +1,9 @@
 package com.disease.demo.mapper;
 
 import com.disease.demo.model.entity.User;
-import com.sun.xml.internal.bind.annotation.XmlIsSet;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,7 +24,7 @@ public interface UserMapper {
      * @date: 11:41 2020/2/4
      */
     @Select("SELECT * FROM user WHERE id = #{id}")
-    Optional<User> findUserById(@Param("id") String id);
+    Optional<User> findUserById(@Param("id") Integer id);
 
     /**
      * 功能描述: 插入用户信息
@@ -48,7 +46,7 @@ public interface UserMapper {
      * @date: 11:42 2020/2/4
      */
     @Update("UPDATE user SET name = #{name}, avatar = #{avatar} WHERE id = #{id}")
-    Integer updateUser(@Param("id") String id, @Param("name") String name, @Param("avatar") String avatar);
+    Integer updateUser(@Param("id") Integer id, @Param("name") String name, @Param("avatar") String avatar);
     
     /**
      * 功能描述: 查询用户是否是第一次登录
@@ -59,10 +57,10 @@ public interface UserMapper {
      * @date: 2020/2/4 16:41
      */
     @Select("SELECT is_first_login FROM user WHERE id = #{id}")
-    Integer findIsFirstLogin(@Param("id") String id);
+    Integer findIsFirstLogin(@Param("id") Integer id);
     
     @Update("UPDATE user SET is_first_login = #{is_first_login} WHERE id = #{id}")
-    Integer updateIsFirstLogin(@Param("id") String id, @Param("is_first_login") Integer isFirstLogin);
+    Integer updateIsFirstLogin(@Param("id") Integer id, @Param("is_first_login") Integer isFirstLogin);
     
     /**
      * 功能描述: 查询当前用户数量

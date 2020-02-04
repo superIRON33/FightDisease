@@ -13,7 +13,7 @@ import lombok.Getter;
 public enum VariableEnum {
 
     /**
-     * 未删除/请求成功/用户第一次登录
+     * 未删除/请求成功/用户第一次登录/设默认值
      */
     OK(0),
 

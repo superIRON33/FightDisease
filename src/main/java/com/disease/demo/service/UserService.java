@@ -9,13 +9,13 @@ import com.disease.demo.model.dto.ResultDTO;
  */
 public interface UserService {
     
-    ResultDTO getUserInfo(String id, String encryptedData, String iv, String session);
+    ResultDTO getUserInfo(Integer id, String encryptedData, String iv, String session);
     
     ResultDTO getEpidemic(String cityName);
     
-    ResultDTO updateIntegral(String id, Integer integral, Integer mode);
+    ResultDTO updateIntegral(Integer id, Integer integral, Integer mode);
     
-    ResultDTO getHonour(String id);
+    ResultDTO getHonour(Integer id);
     
-    ResultDTO updateStatus(String id);
+    ResultDTO updateStatus(Integer id);
 }

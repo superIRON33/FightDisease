@@ -9,5 +9,5 @@ import com.disease.demo.model.dto.ResultDTO;
  */
 public interface HeadquarterService {
     
-    ResultDTO getHeadQuarter(String id);
+    ResultDTO getHeadQuarter(Integer id);
 }

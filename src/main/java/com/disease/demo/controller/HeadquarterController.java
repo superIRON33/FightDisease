@@ -22,13 +22,13 @@ public class HeadquarterController {
     private HeadquarterService headquarterService;
     
     @PostMapping(value = "/headQuarter")
-    public ResultDTO updateStatus(@RequestParam String id) {
+    public ResultDTO updateStatus(@RequestParam Integer id) {
         
         return userService.updateStatus(id);
     }
     
     @GetMapping(value = "/headQuarter")
-    public ResultDTO getHeadQuarter(@RequestParam String id) {
+    public ResultDTO getHeadQuarter(@RequestParam Integer id) {
         
         return headquarterService.getHeadQuarter(id);
     }

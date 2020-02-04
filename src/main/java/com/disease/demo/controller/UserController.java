@@ -18,7 +18,7 @@ public class UserController {
     private UserService userService;
     
     @GetMapping(value = "/userInfo")
-    public ResultDTO getUserInfo(@RequestParam String id,
+    public ResultDTO getUserInfo(@RequestParam Integer id,
                                  @RequestParam String encryptedData,
                                  @RequestParam String iv,
                                  @RequestParam String session) {
@@ -33,7 +33,7 @@ public class UserController {
     }
     
     @PostMapping(value = "/integral")
-    public ResultDTO updateIntegral(@RequestParam String id,
+    public ResultDTO updateIntegral(@RequestParam Integer id,
                                     @RequestParam Integer integral,
                                     @RequestParam Integer mode) {
 
@@ -41,7 +41,7 @@ public class UserController {
     }
     
     @GetMapping(value = "/honour")
-    public ResultDTO getHonour(@RequestParam String id) {
+    public ResultDTO getHonour(@RequestParam Integer id) {
         
         return userService.getHonour(id);
     }

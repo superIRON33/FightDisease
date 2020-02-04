@@ -21,7 +21,7 @@ public class WXLoginController {
     private WXLoginService wxLoginService;
 
     @PostMapping(value = "/login")
-    public ResultDTO Login(@RequestParam(required = false) String id,
+    public ResultDTO Login(@RequestParam(required = false) Integer id,
                            @RequestParam String code,
                            @RequestParam String name,
                            @RequestParam String avatar) {
