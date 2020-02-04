@@ -26,7 +26,27 @@ public enum VariableEnum {
      * 用户初始积分
      */
     INITIAL_INTEGRAL(20),
-
+    
+    /**
+     * 通过登录获得积分
+     */
+    LOGIN_INTEGRAL(1),
+    
+    /**
+     * 通过分享荣誉获得积分
+     */
+    SHARE_INTEGRAL(2),
+    
+    /**
+     * 通过单人答题获得积分
+     */
+    SINGLE_INTEGRAL(3),
+    
+    /**
+     * 通过双人答题获得积分
+     */
+    DOUBLE_INTEGRAL(4),
+    
     /**
      * 每日积分上限
      */
@@ -35,22 +55,17 @@ public enum VariableEnum {
     /**
      * 百毒不侵(步数小于100)
      */
-    NO_POISON(0),
+    NO_POISON(100),
     
     /**
      * 瘟疫克星(步数100-1000)
      */
-    PLAQUE_NEMESIS(1),
+    PLAQUE_NEMESIS(1000),
     
     /**
      * 防疫大师(步数1000-10000)
      */
-    EPIDEMIC_PREVENTION_MASTER(2),
-    
-    /**
-     * 抗疫勇士(步数超过10000)
-     */
-    ANTI_EPIDEMIC_WARRIOR(3),
+    EPIDEMIC_PREVENTION_MASTER(10000),
     
     /**
      * 登录超时时间-发布版(7天、单位为秒)

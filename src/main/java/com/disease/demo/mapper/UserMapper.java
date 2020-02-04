@@ -1,11 +1,11 @@
 package com.disease.demo.mapper;
 
 import com.disease.demo.model.entity.User;
+import com.sun.xml.internal.bind.annotation.XmlIsSet;
 import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,7 +37,7 @@ public interface UserMapper {
      * @date: 11:42 2020/2/4
      */
     @Insert("INSERT INTO user(name, avatar) VALUES(#{name}, #{avatar})")
-    void insertNewUser(@Param("name") String name, @Param("avatar") String avatar);
+    Integer insertNewUser(@Param("name") String name, @Param("avatar") String avatar);
 
     /**
      * 功能描述: 更新指定用户信息
@@ -48,5 +48,74 @@ public interface UserMapper {
      * @date: 11:42 2020/2/4
      */
     @Update("UPDATE user SET name = #{name}, avatar = #{avatar} WHERE id = #{id}")
-    void updateUser(@Param("id") String id, @Param("name") String name, @Param("avatar") String avatar);
+    Integer updateUser(@Param("id") String id, @Param("name") String name, @Param("avatar") String avatar);
+    
+    /**
+     * 功能描述: 查询用户是否是第一次登录
+     *
+     * @param: [id]
+     * @return: [Integer]
+     * @auther: wjy
+     * @date: 2020/2/4 16:41
+     */
+    @Select("SELECT is_first_login FROM user WHERE id = #{id}")
+    Integer findIsFirstLogin(@Param("id") String id);
+    
+    @Update("UPDATE user SET is_first_login = #{is_first_login} WHERE id = #{id}")
+    Integer updateIsFirstLogin(@Param("id") String id, @Param("is_first_login") Integer isFirstLogin);
+    
+    /**
+     * 功能描述: 查询当前用户数量
+     *
+     * @param: []
+     * @return: java.util.List<java.lang.Integer>
+     * @auther: wjy
+     * @date: 2020/2/4 20:25
+     */
+    @Select("SELECT COUNT(id) FROM user")
+    Integer findCount();
+    
+    /**
+     * 功能描述: 查看步数低于多少用户
+     *
+     * @param: [stepNumber]
+     * @return: java.lang.Integer
+     * @auther: wjy
+     * @date: 2020/2/4 20:30
+     */
+    @Select("SELECT COUNT(id) FROM user WHERE step_number > #{step_number}")
+    Integer findStepNumberOver(@Param("step_number") Integer stepNumber);
+
+    /**
+     * 功能描述: 查看积分高于多少用户
+     *
+     * @param: [integral]
+     * @return: java.lang.Integer
+     * @auther: wjy
+     * @date: 2020/2/4 20:30
+     */
+    @Select("SELECT COUNT(id) FROM user WHERE integral < #{integral}")
+    Integer findIntegralOver(@Param("integral") Integer integral);
+    
+    /**
+     * 功能描述: 更新用户积分
+     *
+     * @param: [integral]
+     * @return: java.lang.Integer
+     * @auther: wjy
+     * @date: 2020/2/4 20:46
+     */
+    @Select("UPDATE user SET integral = #{integral}")
+    Integer updateIntegral(@Param("integral") Integer integral);
+    
+    /**
+     * 功能描述: 更新用户单人游戏积分
+     *
+     * @param: [single_integral]
+     * @return: java.lang.Integer
+     * @auther: wjy
+     * @date: 2020/2/4 21:03
+     */
+    @Select("UPDATE user SET single_integral = #{single_integral}")
+    Integer updateSingleIntegral(@Param("single_integral") Integer single_integral);
 }

@@ -11,13 +11,13 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class HonorDTO {
-
-    private String avatar;
+    
     private String name;
+    private String avatar;
     private Integer days;
     private Integer stepNumber;
-    private Integer stepNumberRank;
+    private Float stepNumberRank;
     private Integer integral;
-    private Integer integralRank;
+    private Float integralRank;
     private Integer honoraryTitle;
 }

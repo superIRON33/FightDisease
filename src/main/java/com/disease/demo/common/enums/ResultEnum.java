@@ -40,7 +40,17 @@ public enum ResultEnum {
     /**
      * 解密失败
      */
-    DECRYPTION_FAILED(20004, "解密失败");
+    DECRYPTION_FAIL(20004, "解密失败"),
+    
+    /**
+     * 更新失败
+     */
+    UPDATE_FAIL(20005, "更新失败"),
+    
+    /**
+     * 删除失败
+     */
+    DELETE_FAIL(20006, "删除失败");
     
     private Integer code;
     
