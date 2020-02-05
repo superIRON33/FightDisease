@@ -15,9 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.rmi.CORBA.Util;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @Auther: Bob
@@ -48,6 +50,7 @@ public class WXLoginServiceImpl implements WXLoginService {
         //对Json数据进行解析
         JSONObject jsonObject = JSONObject.parseObject(wxResult);
         String openid = jsonObject.getString("openid");
+        String session_key = jsonObject.getString("session_key");
         log.info("openid:{}", openid);
         if (StringUtil.isNullOrEmpty(openid)) {
             log.error("errcode:{}，errmsg: {}", jsonObject.getString("errcode"), jsonObject.getString("errmsg"));
@@ -63,7 +66,8 @@ public class WXLoginServiceImpl implements WXLoginService {
         } else {
             //用户首次登录
             userMapper.insertNewUser(name, avatar);
-            redisOperator.set("openid", openid, VariableEnum.LOGIN_TIMEOUT.getValue());
+            String session = UUID.randomUUID().toString().replace("-", " ").toUpperCase();
+            redisOperator.set(session, openid + " " + session_key, VariableEnum.LOGIN_TIMEOUT.getValue());
             res.put("id", id);
         }
         res.put("openid", openid);
