@@ -29,12 +29,7 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public ResultDTO getEpidemic(String cityName) {
-
-
-        ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
-        return resultDTO;
-    }
+    public ResultDTO getEpidemic(String cityName) {return null;}
     
     @Override
     public ResultDTO updateIntegral(Integer id, Integer integral, Integer mode) {
@@ -43,16 +38,21 @@ public class UserServiceImpl implements UserService {
         if (user.isPresent()) {
             Integer nowIntegral = user.get().getIntegral(), singleIntegral = user.get().getSingleIntegral();
             if (mode.equals(VariableEnum.DOUBLE_INTEGRAL.getValue())) {
-                Integer status = userMapper.updateIntegral(nowIntegral + integral);
+                Integer status = userMapper.updateIntegral(id, nowIntegral + integral);
                 return status.equals(VariableEnum.OK.getValue())? new ResultDTO(ResultEnum.UPDATE_FAIL): new ResultDTO(ResultEnum.SUCCESS);
             }
             else if (mode.equals(VariableEnum.SINGLE_INTEGRAL.getValue())) {
-                if (singleIntegral >= VariableEnum.UPPER_LIMIT.getValue()) {
+                if (singleIntegral + integral >= VariableEnum.UPPER_LIMIT.getValue()) {
+                    Integer status1 = userMapper.updateIntegral(user.get().getId(), nowIntegral + VariableEnum.UPPER_LIMIT.getValue() - singleIntegral);
+                    Integer status2 = userMapper.updateSingleIntegral(user.get().getId(), VariableEnum.UPPER_LIMIT.getValue());
+                    if (status1.equals(VariableEnum.OK.getValue()) || status2.equals(VariableEnum.OK.getValue())) {
+                        return new ResultDTO(ResultEnum.UPDATE_FAIL);
+                    }
                     return new ResultDTO(ResultEnum.UPPER_LIMIT);
                 }
                 else {
-                    Integer status1 = userMapper.updateIntegral(nowIntegral + integral);
-                    Integer status2 = userMapper.updateSingleIntegral(singleIntegral + integral);
+                    Integer status1 = userMapper.updateIntegral(user.get().getId(), nowIntegral + integral);
+                    Integer status2 = userMapper.updateSingleIntegral(user.get().getId(), singleIntegral + integral);
                     if (status1.equals(VariableEnum.OK.getValue()) || status2.equals(VariableEnum.OK.getValue())) {
                         return new ResultDTO(ResultEnum.UPDATE_FAIL);
                     }
@@ -61,8 +61,9 @@ public class UserServiceImpl implements UserService {
             }
             else if (mode.equals(VariableEnum.LOGIN_INTEGRAL.getValue())) {
                 if (user.get().getIntegralLogin().equals(VariableEnum.OK.getValue())) {
-                    Integer status = userMapper.updateIntegral(integral + nowIntegral);
-                    if (status.equals(VariableEnum.OK.getValue())) {
+                    Integer status1 = userMapper.updateIntegral(user.get().getId(), integral + nowIntegral);
+                    Integer status2 = userMapper.updateIntegralLogin(user.get().getId());
+                    if (status1.equals(VariableEnum.OK.getValue()) || status2.equals(VariableEnum.OK.getValue())) {
                         return new ResultDTO(ResultEnum.UPDATE_FAIL);
                     }
                 }
@@ -70,8 +71,9 @@ public class UserServiceImpl implements UserService {
             }
             else if (mode.equals(VariableEnum.SHARE_INTEGRAL.getValue())) {
                 if (user.get().getIntegralShare().equals(VariableEnum.OK.getValue())) {
-                    Integer status = userMapper.updateIntegral(integral + nowIntegral);
-                    if (status.equals(VariableEnum.OK.getValue())) {
+                    Integer status1 = userMapper.updateIntegral(user.get().getId(), integral + nowIntegral);
+                    Integer status2 = userMapper.updateIntegralShare(user.get().getId());
+                    if (status1.equals(VariableEnum.OK.getValue()) || status2.equals(VariableEnum.OK.getValue())) {
                         return new ResultDTO(ResultEnum.UPDATE_FAIL);
                     }
                 }
@@ -79,7 +81,6 @@ public class UserServiceImpl implements UserService {
             }
         }
         return new ResultDTO(ResultEnum.ID_INVALID);
-    
     }
     
     @Override
@@ -88,23 +89,24 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = userMapper.findUserById(id);
         if (user.isPresent()) {
             Integer honoraryTitle = 3, integral = user.get().getIntegral();
-            Integer stepNumber = user.get().getStepNumber(), total = userMapper.findCount();
-            Float stepNumberRank = (float) userMapper.findStepNumberOver(stepNumber) / total;
-            Float integralRank = (float) userMapper.findIntegralOver(integral) / total;
-            if (integral < VariableEnum.NO_POISON.getValue()) {
+            Integer stepNumber = user.get().getStepNumber(), total = userMapper.findCount() - 1;
+            Integer stepNumberRank = (int) ((float) userMapper.findStepNumberOver(stepNumber) * 100 / total);
+            Integer integralRank = (int) ((float) userMapper.findIntegralOver(integral)  * 100 / total);
+            if (stepNumber < VariableEnum.NO_POISON.getValue()) {
                 honoraryTitle = 0;
             }
-            else if (integral < VariableEnum.PLAQUE_NEMESIS.getValue()) {
+            else if (stepNumber < VariableEnum.PLAQUE_NEMESIS.getValue()) {
                 honoraryTitle = 1;
             }
-            else if (integral < VariableEnum.EPIDEMIC_PREVENTION_MASTER.getValue()) {
-                honoraryTitle = 3;
+            else if (stepNumber < VariableEnum.EPIDEMIC_PREVENTION_MASTER.getValue()) {
+                honoraryTitle = 2;
             }
             HonorDTO honorDTO = new HonorDTO(user.get().getName(), user.get().getAvatar(),
                     user.get().getDays(), stepNumber, stepNumberRank,
                     integral, integralRank, honoraryTitle);
             ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
             resultDTO.setData(honorDTO);
+            return resultDTO;
         }
         return new ResultDTO(ResultEnum.ID_INVALID);
     }
@@ -113,16 +115,16 @@ public class UserServiceImpl implements UserService {
     public ResultDTO updateStatus(Integer id) {
     
         Integer isFirstLogin = userMapper.findIsFirstLogin(id);
-        if (isFirstLogin.equals(VariableEnum.DELETE.getValue())) {
-            return new ResultDTO(ResultEnum.SUCCESS);
-        }
-        else if (isFirstLogin.equals(VariableEnum.OK.getValue())) {
-            Integer status = userMapper.updateIsFirstLogin(id, VariableEnum.DELETE.getValue());
-            if (!status.equals(VariableEnum.OK.getValue())) {
+        if (isFirstLogin != null) {
+            if (isFirstLogin.equals(VariableEnum.DELETE.getValue())) {
                 return new ResultDTO(ResultEnum.SUCCESS);
-            }
-            else {
-                return new ResultDTO(ResultEnum.UPDATE_FAIL);
+            } else if (isFirstLogin.equals(VariableEnum.OK.getValue())) {
+                Integer status = userMapper.updateIsFirstLogin(id, VariableEnum.DELETE.getValue());
+                if (!status.equals(VariableEnum.OK.getValue())) {
+                    return new ResultDTO(ResultEnum.SUCCESS);
+                } else {
+                    return new ResultDTO(ResultEnum.UPDATE_FAIL);
+                }
             }
         }
         return new ResultDTO(ResultEnum.ID_INVALID);

@@ -9,6 +9,7 @@ import lombok.Data;
  */
 @Data
 public class HttpPojo {
+    
     private String httpHost;
 
     private String httpAccept;

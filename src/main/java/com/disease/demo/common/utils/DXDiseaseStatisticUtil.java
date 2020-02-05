@@ -30,6 +30,7 @@ public class DXDiseaseStatisticUtil {
      * @date: 15:24 2020/2/5
      */
     public static String parseParam(Map paramObj){
+        
         String param = "";
         if (paramObj != null && !paramObj.isEmpty()){
             for (Object key:paramObj.keySet()){
@@ -50,6 +51,7 @@ public class DXDiseaseStatisticUtil {
      * @date: 15:25 2020/2/5
      */
     public static String randIP() {
+        
         Random random = new Random(System.currentTimeMillis());
         return (random.nextInt(255) + 1) + "." + (random.nextInt(255) + 1)
                 + "." + (random.nextInt(255) + 1) + "."
@@ -65,6 +67,7 @@ public class DXDiseaseStatisticUtil {
      * @date: 15:30 2020/2/5
      */
     public static String httpSendGet(String url, Map paramObj, HttpPojo httpPojo){
+        
         String result = "";
         String urlName = url + "?" + parseParam(paramObj);
         BufferedReader in=null;
@@ -111,6 +114,7 @@ public class DXDiseaseStatisticUtil {
     }
 
     public static String getAreaStat(){
+        
         String url="https://ncov.dxy.cn/ncovh5/view/pneumonia";
         //模拟请求
         HttpPojo httpPojo = new HttpPojo();
