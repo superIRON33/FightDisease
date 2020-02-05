@@ -30,7 +30,10 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public ResultDTO getEpidemic(String cityName) {
-        return null;
+        
+
+        ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
+        return resultDTO;
     }
     
     @Override
