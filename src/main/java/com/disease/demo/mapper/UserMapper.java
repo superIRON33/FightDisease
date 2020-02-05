@@ -19,7 +19,7 @@ public interface UserMapper {
      * 功能描述: 通过id查询用户信息
      *
      * @param: [id]
-     * @return: Optional<User>
+     * @return: User
      * @auther: zbw
      * @date: 11:41 2020/2/4
      */
@@ -34,8 +34,10 @@ public interface UserMapper {
      * @auther: zbw
      * @date: 11:42 2020/2/4
      */
+
     @Insert("INSERT INTO user(name, avatar) VALUES(#{name}, #{avatar})")
-    Integer insertNewUser(@Param("name") String name, @Param("avatar") String avatar);
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+    Integer insertNewUser(User user);
 
     /**
      * 功能描述: 更新指定用户信息

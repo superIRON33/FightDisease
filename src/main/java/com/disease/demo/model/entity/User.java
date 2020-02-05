@@ -34,8 +34,8 @@ public class User {
     
     private Integer days;
 
-//    public User(String name, String avatar) {
-//        this.name = name;
-//        this.avatar = avatar;
-//    }
+    public User(String name, String avatar) {
+        this.name = name;
+        this.avatar = avatar;
+    }
 }

@@ -13,6 +13,11 @@ import lombok.Getter;
 public enum VariableEnum {
 
     /**
+     * id无效
+     */
+    INVALID(-1),
+
+    /**
      * 未删除/请求成功/用户第一次登录/设默认值
      */
     OK(0),
