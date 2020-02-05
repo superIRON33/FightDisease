@@ -15,7 +15,7 @@ import java.util.List;
 public interface HeadquarterMapper {
     
     /**
-     * 功能描述: 查询用户是否是第一次登录
+     * 功能描述: 查询所有问答
      *
      * @param: []
      * @return: java.util.List<com.disease.demo.model.entity.Headquarter>

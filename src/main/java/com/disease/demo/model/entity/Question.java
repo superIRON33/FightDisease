@@ -33,6 +33,4 @@ public class Question {
     private Timestamp gmtCreate;
     
     private Timestamp gmtModified;
-    
-    private Integer deleteStatus;
 }

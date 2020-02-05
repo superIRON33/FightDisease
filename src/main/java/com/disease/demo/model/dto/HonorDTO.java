@@ -16,8 +16,8 @@ public class HonorDTO {
     private String avatar;
     private Integer days;
     private Integer stepNumber;
-    private Float stepNumberRank;
+    private Integer stepNumberRank;
     private Integer integral;
-    private Float integralRank;
+    private Integer integralRank;
     private Integer honoraryTitle;
 }

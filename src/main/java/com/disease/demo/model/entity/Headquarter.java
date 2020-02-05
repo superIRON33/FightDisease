@@ -22,9 +22,9 @@ public class Headquarter {
     
     private String answer;
     
+    private String image;
+    
     private Timestamp gmtCreate;
     
     private Timestamp gmtModified;
-    
-    private Integer deleteStatus;
 }
