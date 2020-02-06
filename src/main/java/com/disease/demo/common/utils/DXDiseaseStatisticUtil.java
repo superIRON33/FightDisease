@@ -1,5 +1,7 @@
 package com.disease.demo.common.utils;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.disease.demo.model.entity.HttpPojo;
 
 import java.io.BufferedReader;
@@ -133,18 +135,12 @@ public class DXDiseaseStatisticUtil {
         String reg= "window.getAreaStat = (.*?)\\}(?=catch)";
         Pattern totalPattern = Pattern.compile(reg);
         Matcher totalMatcher = totalPattern.matcher(htmlResult);
-
         String result="";
         if (totalMatcher.find()){
             result = totalMatcher.group(1);
-            System.out.println(result);
+            //System.out.println(result);
             //各个省市的是一个列表List，如果想保存到数据库中，要遍历结果，下面是demo
-            /*JSONArray array = JSONArray.parseArray(result);
-            JSONObject jsonObject = JSONObject.parseObject(array.getString(0));
-            String provinceName = jsonObject.getString("provinceName");
-            System.out.println("provinceName："+provinceName);*/
         }
-
         return result;
     }
 }

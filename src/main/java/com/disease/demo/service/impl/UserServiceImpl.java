@@ -1,15 +1,23 @@
 package com.disease.demo.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.disease.demo.common.enums.ResultEnum;
 import com.disease.demo.common.enums.VariableEnum;
+import com.disease.demo.common.utils.DXDiseaseStatisticUtil;
+import com.disease.demo.mapper.CityMapper;
 import com.disease.demo.mapper.UserMapper;
 import com.disease.demo.model.dto.HonorDTO;
 import com.disease.demo.model.dto.ResultDTO;
+import com.disease.demo.model.entity.City;
 import com.disease.demo.model.entity.User;
 import com.disease.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,6 +30,9 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private CityMapper cityMapper;
     
     @Override
     public ResultDTO getUserInfo(Integer id, String encryptedData, String iv, String session) {
@@ -29,7 +40,33 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public ResultDTO getEpidemic(String cityName) {return null;}
+//    @Scheduled()
+    public ResultDTO getEpidemic(String cityName) {
+
+        String result = DXDiseaseStatisticUtil.getAreaStat();
+        JSONArray array = JSONArray.parseArray(result);
+        for (int i = 0; i < array.size(); i++) {
+            JSONObject jsonObject = JSONObject.parseObject(array.getString(i));
+            City province = new City(jsonObject.getString("provinceName"),
+                    jsonObject.getString("confirmedCount"));
+            cityMapper.addCity(province);
+            System.out.println(jsonObject.getString("provinceName")+":"+jsonObject.getString("confirmedCount"));
+            String cities = jsonObject.getString("cities");
+            JSONArray cityList = JSONArray.parseArray(cities);
+//            for (int j = 0; j < cityList.size(); j++) {
+//                JSONObject city = JSONObject.parseObject(array.getString(i));
+//                System.out.println(city.getString("cityName")+":"+city.getString("confirmedCount"));
+//                City city1 = new City(city.getString("cityName"),
+//                        jsonObject.getString("confirmedCount"));
+//                cityMapper.addCity(city1);
+            }
+
+
+//        Integer res = cityMapper.getCount(cityName);
+//        ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
+//        resultDTO.setData(res);
+        return null;
+    }
     
     @Override
     public ResultDTO updateIntegral(Integer id, Integer integral, Integer mode) {
