@@ -31,16 +31,30 @@ public interface UserMapper {
     Optional<User> findUserById(@Param("id") Integer id);
 
     /**
+     * 功能描述: 通过openId查询用户
+     *
+     * @param: [openid]
+     * @return: Optional<User>
+     * @auther: zbw
+     * @date: 16:38 2020/2/6
+     */
+    @Select("SELECT * FROM user WHERE openid = #{openid}")
+    Optional<User> findUserByOpenid(@Param("openid") String openid);
+
+
+    /**
      * 功能描述: 插入用户信息
      *
      * @param: [user]
      * @return: java.lang.Integer
-     * @auther: wjy
+     * @auther: zbw
      * @date: 2020/2/5 21:23
      */
-    @Insert("INSERT INTO user(name, avatar) VALUES(#{name}, #{avatar})")
+    @Insert("INSERT INTO user(openid, name, avatar) VALUES(#{openid}, #{name}, #{avatar})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     Integer insertNewUser(User user);
+
+
 
     /**
      * 功能描述: 更新指定用户信息

@@ -36,7 +36,7 @@ public class WXLoginServiceImpl implements WXLoginService {
     private UserMapper userMapper;
 
     @Override
-    public ResultDTO login(Integer id, String code, String name, String avatar) {
+    public ResultDTO login(String code, String name, String avatar) {
 
         Map<String, String> param = new HashMap<>();
         param.put("appid", WechatEnum.APP_ID.getValue());
@@ -51,27 +51,23 @@ public class WXLoginServiceImpl implements WXLoginService {
         String openid = jsonObject.getString("openid");
         String session_key = jsonObject.getString("session_key");
         String session = UUID.randomUUID().toString().replace("-", " ").toUpperCase();
-        log.info("openid:{}", openid);
-        log.info("session_key:{}", session_key);
         if (StringUtil.isNullOrEmpty(openid)) {
             log.error("errcode:{}，errmsg: {}", jsonObject.getString("errcode"), jsonObject.getString("errmsg"));
             return new ResultDTO(ResultEnum.INTERFACE_FAIL);
         }
         Map<String, Object> res = new HashMap<>();
-        if (id != null) {
-            Optional<User> user = userMapper.findUserById(id);
-            if (user.isPresent()) {
-                userMapper.updateUser(id, name, avatar);
-                res.put("id", id);
-            } else {
-                return new ResultDTO(ResultEnum.ID_INVALID);
-            }
+        Optional<User> user = userMapper.findUserByOpenid(openid);
+        if (user.isPresent()) {
+            //用户已经登陆过
+            userMapper.updateUser(user.get().getId(), name, avatar);
+            redisOperator.set(session, session_key, VariableEnum.LOGIN_TIMEOUT.getValue());
+            res.put("id", user.get().getId());
         } else {
-            //用户首次登录
-            User user = new User(name, avatar);
-            userMapper.insertNewUser(user);
-            redisOperator.set(session, openid + " " + session_key, VariableEnum.LOGIN_TIMEOUT.getValue());
-            res.put("id", user.getId());
+            //用户未登录过
+            User newUser = new User(openid, name, avatar);
+            userMapper.insertNewUser(newUser);
+            redisOperator.set(session, session_key, VariableEnum.LOGIN_TIMEOUT.getValue());
+            res.put("id", newUser.getId());
         }
         res.put("session", session);
         ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);

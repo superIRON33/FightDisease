@@ -21,11 +21,10 @@ public class WXLoginController {
     private WXLoginService wxLoginService;
 
     @PostMapping(value = "/login")
-    public ResultDTO Login(@RequestParam(required = false) Integer id,
-                           @RequestParam String code,
+    public ResultDTO Login(@RequestParam String code,
                            @RequestParam String name,
                            @RequestParam String avatar) {
 
-        return wxLoginService.login(id, code, name, avatar);
+        return wxLoginService.login(code, name, avatar);
     }
 }

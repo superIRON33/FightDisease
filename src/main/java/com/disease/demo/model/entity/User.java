@@ -15,7 +15,9 @@ import lombok.NoArgsConstructor;
 public class User {
     
     private Integer id;
-    
+
+    private String openid;
+
     private String name;
     
     private String avatar;
@@ -34,7 +36,8 @@ public class User {
     
     private Integer days;
 
-    public User(String name, String avatar) {
+    public User(String openid, String name, String avatar) {
+        this.openid = openid;
         this.name = name;
         this.avatar = avatar;
     }
