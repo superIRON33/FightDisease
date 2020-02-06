@@ -2,6 +2,7 @@ package com.disease.demo.controller;
 
 import com.disease.demo.model.dto.ResultDTO;
 import com.disease.demo.service.UserService;
+import com.disease.demo.service.base.ScheduledTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,9 @@ public class UserController {
     
     @Autowired
     private UserService userService;
+
+//    @Autowired
+//    private ScheduledTask scheduledTask;
     
     @GetMapping(value = "/userInfo")
     public ResultDTO getUserInfo(@RequestParam Integer id,
@@ -45,4 +49,9 @@ public class UserController {
         
         return userService.getHonour(id);
     }
+
+//    @GetMapping(value = "/test")
+//    public void test() {
+//        scheduledTask.updateCityConfirmedCount();
+//    }
 }

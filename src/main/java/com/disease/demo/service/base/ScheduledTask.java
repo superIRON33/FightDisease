@@ -1,7 +1,12 @@
 package com.disease.demo.service.base;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.disease.demo.common.enums.VariableEnum;
+import com.disease.demo.common.utils.DXDiseaseStatisticUtil;
+import com.disease.demo.mapper.CityMapper;
 import com.disease.demo.mapper.UserMapper;
+import com.disease.demo.model.entity.City;
 import com.disease.demo.model.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author: wjy
@@ -22,9 +27,12 @@ public class ScheduledTask {
     
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private CityMapper cityMapper;
     
     @Transactional(rollbackOn = Exception.class)
-    @Scheduled(cron = "0 59 23 * * ?")
+    @Scheduled(cron = "0 50 23 * * ?")
     public void updateDays() {
         
         log.info("每天23:59:00更新用户登录天数");
@@ -38,7 +46,7 @@ public class ScheduledTask {
     }
     
     @Transactional(rollbackOn = Exception.class)
-    @Scheduled(cron = "10 59 23 * * ?")
+    @Scheduled(cron = "0 52 23 * * ?")
     public void updateIntegralByStepNumber() {
         
         log.info("每天23:59:10判断: 若用户今日步数<=1000步且今日登录过，积分加10分");
@@ -54,7 +62,7 @@ public class ScheduledTask {
     }
     
     @Transactional(rollbackOn = Exception.class)
-    @Scheduled(cron = "20 59 23 * * ?")
+    @Scheduled(cron = "0 54 23 * * ?")
     public void updateUserSingleIntegral() {
         
         log.info("每天23:59:20初始化用户的单人模式积分上限");
@@ -68,7 +76,7 @@ public class ScheduledTask {
     }
     
     @Transactional(rollbackOn = Exception.class)
-    @Scheduled(cron = "30 59 23 * * ?")
+    @Scheduled(cron = "0 56 23 * * ?")
     public void updateIntegralLogin() {
         
         log.info("每天23:59:30初始化integralLogin");
@@ -82,7 +90,7 @@ public class ScheduledTask {
     }
     
     @Transactional(rollbackOn = Exception.class)
-    @Scheduled(cron = "40 59 23 * * ?")
+    @Scheduled(cron = "0 58 23 * * ?")
     public void updateIntegralShare() {
         
         log.info("每天23:59:40初始化integralShare");
@@ -96,7 +104,7 @@ public class ScheduledTask {
     }
     
     @Transactional(rollbackOn = Exception.class)
-    @Scheduled(cron = "50 59 23 * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     public void updateStepNumber() {
         
         log.info("每天23:59:50初始化今日步数");
@@ -106,6 +114,37 @@ public class ScheduledTask {
         }
         else {
             log.info("初始化今日步数成功");
+        }
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    @Scheduled(cron = "0 0 6,16 * * ?")
+    public void updateCityConfirmedCount() {
+
+        String result = DXDiseaseStatisticUtil.getAreaStat();
+        JSONArray array = JSONArray.parseArray(result);
+        Map<String, String> map = new HashMap<>();
+        for (int i = 0; i < array.size(); i++) {
+            JSONObject jsonObject = JSONObject.parseObject(array.getString(i));
+            map.put(jsonObject.getString("provinceName"), jsonObject.getString("confirmedCount"));
+            String cities = jsonObject.getString("cities");
+            JSONArray cityList = JSONArray.parseArray(cities);
+            for (int j = 0; j < cityList.size(); j++) {
+                JSONObject city = JSONObject.parseObject(cityList.getString(j));
+                map.put(city.getString("cityName"), city.getString("confirmedCount"));
+            }
+        }
+
+        Iterator<Map.Entry<String, String>> entries = map.entrySet().iterator();
+        while (entries.hasNext()) {
+            Map.Entry<String, String> entry = entries.next();
+            Optional<City> city = cityMapper.getCount(entry.getKey());
+            if (city.isPresent()) {
+                cityMapper.updateCount(entry.getKey(), entry.getValue());
+            } else {
+                City city1 = new City(entry.getKey(), entry.getValue());
+                cityMapper.addCity(city1);
+            }
         }
     }
 }

@@ -16,7 +16,8 @@ import com.disease.demo.service.UserService;
 import com.disease.demo.service.base.WXStepNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
+
+import java.util.*;
 
 /**
  * @author: wjy
@@ -25,16 +26,16 @@ import java.util.Optional;
  */
 @Service
 public class UserServiceImpl implements UserService {
-    
+
     @Autowired
     private UserMapper userMapper;
 
     @Autowired
     private CityMapper cityMapper;
-    
+
     @Autowired
     private WXStepNumber wxStepNumber;
-    
+
     @Override
     public ResultDTO getUserInfo(Integer id, String encryptedData, String iv, String session) {
         Optional<User> user = userMapper.findUserById(id);
@@ -44,36 +45,23 @@ public class UserServiceImpl implements UserService {
             HomeDTO homeDTO = new HomeDTO(newStepNumber, integral);
             ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
             resultDTO.setData(homeDTO);
+            return resultDTO;
         }
         return new ResultDTO(ResultEnum.ID_INVALID);
     }
-    
-    @Override
-//    @Scheduled()
-    public ResultDTO getEpidemic(String cityName) {
 
-        String result = DXDiseaseStatisticUtil.getAreaStat();
-        JSONArray array = JSONArray.parseArray(result);
-        for (int i = 0; i < array.size(); i++) {
-            JSONObject jsonObject = JSONObject.parseObject(array.getString(i));
-            City province = new City(jsonObject.getString("provinceName"),
-                    jsonObject.getString("confirmedCount"));
-            cityMapper.addCity(province);
-            System.out.println(jsonObject.getString("provinceName")+":"+jsonObject.getString("confirmedCount"));
-            String cities = jsonObject.getString("cities");
-            JSONArray cityList = JSONArray.parseArray(cities);
-//            for (int j = 0; j < cityList.size(); j++) {
-//                JSONObject city = JSONObject.parseObject(array.getString(i));
-//                System.out.println(city.getString("cityName")+":"+city.getString("confirmedCount"));
-//                City city1 = new City(city.getString("cityName"),
-//                        jsonObject.getString("confirmedCount"));
-//                cityMapper.addCity(city1);
-            }
-//        Integer res = cityMapper.getCount(cityName);
-//        ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
-//        resultDTO.setData(res);
-        return null;
+    @Override
+    public ResultDTO getEpidemic(String cityName) {
+        Optional<City> city = cityMapper.getCount(cityName);
+        if (city.isPresent()) {
+            ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
+            resultDTO.setData(city.get().getCount());
+            return resultDTO;
+        } else {
+            return new ResultDTO(ResultEnum.CITY_INVALID);
+        }
     }
+
     
     @Override
     public ResultDTO updateIntegral(Integer id, Integer integral, Integer mode) {
