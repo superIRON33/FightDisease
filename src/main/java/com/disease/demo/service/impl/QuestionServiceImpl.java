@@ -10,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author: wjy
@@ -33,24 +30,32 @@ public class QuestionServiceImpl implements QuestionService {
         Map<String, Map<String, String>> returnMap = new HashMap<>();
         for (int i = 0; i < 6; i++) {
             Optional<Question> question = questionMapper.findQuestion();
+            Set<Integer> set = new HashSet<>();
             if (question.isPresent()) {
-                String a = question.get().getAOption(), b = question.get().getBOption(),
-                        c = question.get().getCOption(), d = question.get().getDOption();
-                Map<String, String> map = new LinkedHashMap<>();
-                map.put(question.get().getName(), question.get().getAnswer());
-                if (!StringUtils.isNullOrEmpty(a)) {
-                    map.put("A", a);
+                if (set.contains(question.get().getId())) {
+                    i--;
                 }
-                if (!StringUtils.isNullOrEmpty(b)) {
-                    map.put("B", b);
+                else {
+                    set.add(question.get().getId());
+                    String a = question.get().getAOption(), b = question.get().getBOption(),
+                            c = question.get().getCOption(), d = question.get().getDOption();
+                    Map<String, String> map = new HashMap<>();
+                    map.put("question", question.get().getName());
+                    map.put("answer", question.get().getAnswer());
+                    if (!StringUtils.isNullOrEmpty(a)) {
+                        map.put("A", a);
+                    }
+                    if (!StringUtils.isNullOrEmpty(b)) {
+                        map.put("B", b);
+                    }
+                    if (!StringUtils.isNullOrEmpty(c)) {
+                        map.put("C", c);
+                    }
+                    if (!StringUtils.isNullOrEmpty(d)) {
+                        map.put("D", d);
+                    }
+                    returnMap.put(String.valueOf(i), map);
                 }
-                if (!StringUtils.isNullOrEmpty(c)) {
-                    map.put("C", c);
-                }
-                if (!StringUtils.isNullOrEmpty(d)) {
-                    map.put("D", d);
-                }
-                returnMap.put(String.valueOf(i), map);
             }
             else {
                 i--;

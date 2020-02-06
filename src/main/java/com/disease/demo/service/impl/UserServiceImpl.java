@@ -16,13 +16,6 @@ import com.disease.demo.service.UserService;
 import com.disease.demo.service.base.WXStepNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 /**
@@ -44,11 +37,9 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public ResultDTO getUserInfo(Integer id, String encryptedData, String iv, String session) {
-        
         Optional<User> user = userMapper.findUserById(id);
         if (user.isPresent()) {
             Integer integral = user.get().getIntegral(), newStepNumber = wxStepNumber.getStepNumber(encryptedData, iv, session);
-            
             userMapper.updateStepNumber(user.get().getId(), newStepNumber);
             HomeDTO homeDTO = new HomeDTO(newStepNumber, integral);
             ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);

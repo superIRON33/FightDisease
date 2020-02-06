@@ -2,13 +2,6 @@ package com.disease.demo.service;
 
 import com.disease.demo.model.dto.ResultDTO;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
 /**
  * @author: wjy
  * @date: 2020/2/3 21:32
