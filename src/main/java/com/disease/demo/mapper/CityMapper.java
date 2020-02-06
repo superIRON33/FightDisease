@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CityMapper {
 
-    @Insert("INSERT INTO city(name, count) VALUES(#{name},#{count})")
+    @Insert("INSERT INTO city(name, count) VALUES(#{name}, #{count})")
     Integer addCity(City city);
 
     @Select("SELECT count FROM city WHERE name = #{name}")

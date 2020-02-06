@@ -9,15 +9,20 @@ import com.disease.demo.mapper.CityMapper;
 import com.disease.demo.mapper.UserMapper;
 import com.disease.demo.model.dto.HonorDTO;
 import com.disease.demo.model.dto.ResultDTO;
+import com.disease.demo.model.dto.HomeDTO;
 import com.disease.demo.model.entity.City;
 import com.disease.demo.model.entity.User;
 import com.disease.demo.service.UserService;
+import com.disease.demo.service.base.WXStepNumber;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 /**
@@ -34,9 +39,22 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CityMapper cityMapper;
     
+    @Autowired
+    private WXStepNumber wxStepNumber;
+    
     @Override
     public ResultDTO getUserInfo(Integer id, String encryptedData, String iv, String session) {
-        return null;
+        
+        Optional<User> user = userMapper.findUserById(id);
+        if (user.isPresent()) {
+            Integer integral = user.get().getIntegral(), newStepNumber = wxStepNumber.getStepNumber(encryptedData, iv, session);
+            
+            userMapper.updateStepNumber(user.get().getId(), newStepNumber);
+            HomeDTO homeDTO = new HomeDTO(newStepNumber, integral);
+            ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
+            resultDTO.setData(homeDTO);
+        }
+        return new ResultDTO(ResultEnum.ID_INVALID);
     }
     
     @Override
@@ -60,8 +78,6 @@ public class UserServiceImpl implements UserService {
 //                        jsonObject.getString("confirmedCount"));
 //                cityMapper.addCity(city1);
             }
-
-
 //        Integer res = cityMapper.getCount(cityName);
 //        ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
 //        resultDTO.setData(res);

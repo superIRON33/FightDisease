@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class StepNumberAndIntegralDTO {
+public class HomeDTO {
     
     private Integer stepNumber;
     private Integer integral;

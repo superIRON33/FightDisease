@@ -24,7 +24,7 @@ public class ScheduledTask {
     private UserMapper userMapper;
     
     @Transactional(rollbackOn = Exception.class)
-    @Scheduled(cron = "00 59 23 * * ? *")
+    @Scheduled(cron = "0 59 23 * * ?")
     public void updateDays() {
         
         log.info("每天23:59:00更新用户登录天数");
@@ -38,7 +38,7 @@ public class ScheduledTask {
     }
     
     @Transactional(rollbackOn = Exception.class)
-    @Scheduled(cron = "10 59 23 * * ? *")
+    @Scheduled(cron = "10 59 23 * * ?")
     public void updateIntegralByStepNumber() {
         
         log.info("每天23:59:10判断: 若用户今日步数<=1000步且今日登录过，积分加10分");
@@ -54,7 +54,7 @@ public class ScheduledTask {
     }
     
     @Transactional(rollbackOn = Exception.class)
-    @Scheduled(cron = "20 59 23 * * ? *")
+    @Scheduled(cron = "20 59 23 * * ?")
     public void updateUserSingleIntegral() {
         
         log.info("每天23:59:20初始化用户的单人模式积分上限");
@@ -68,7 +68,7 @@ public class ScheduledTask {
     }
     
     @Transactional(rollbackOn = Exception.class)
-    @Scheduled(cron = "30 59 23 * * ? *")
+    @Scheduled(cron = "30 59 23 * * ?")
     public void updateIntegralLogin() {
         
         log.info("每天23:59:30初始化integralLogin");
@@ -82,7 +82,7 @@ public class ScheduledTask {
     }
     
     @Transactional(rollbackOn = Exception.class)
-    @Scheduled(cron = "40 59 23 * * ? *")
+    @Scheduled(cron = "40 59 23 * * ?")
     public void updateIntegralShare() {
         
         log.info("每天23:59:40初始化integralShare");
@@ -96,7 +96,7 @@ public class ScheduledTask {
     }
     
     @Transactional(rollbackOn = Exception.class)
-    @Scheduled(cron = "50 59 23 * * ? *")
+    @Scheduled(cron = "50 59 23 * * ?")
     public void updateStepNumber() {
         
         log.info("每天23:59:50初始化今日步数");

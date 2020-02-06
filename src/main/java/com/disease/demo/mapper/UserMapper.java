@@ -53,6 +53,18 @@ public interface UserMapper {
     @Update("UPDATE user SET name = #{name}, avatar = #{avatar} WHERE id = #{id}")
     Integer updateUser(@Param("id") Integer id, @Param("name") String name, @Param("avatar") String avatar);
     
+    
+    /**
+     * 功能描述: 更新用户步数
+     *
+     * @param: [id, stepNumber]
+     * @return: java.lang.Integer
+     * @auther: wjy
+     * @date: 2020/2/6 13:15
+     */
+    @Update("UPDATE user SET step_number = #{step_number} WHERE id = #{id}")
+    Integer updateStepNumber(@Param("id") Integer id, @Param("step_number") Integer stepNumber);
+    
     /**
      * 功能描述: 查询用户是否是第一次登录
      *
