@@ -58,6 +58,11 @@ public enum VariableEnum {
     UPPER_LIMIT(50),
     
     /**
+     * 双人答题积分下限
+     */
+    INTEGRAL_LOWER_LIMIT(10),
+    
+    /**
      * 百毒不侵(步数小于100)
      */
     NO_POISON(100),
@@ -80,7 +85,12 @@ public enum VariableEnum {
     /**
      * 登录超时时间-测试版(2分钟、单位为秒)
      */
-    LOGIN_TIMEOUT_TEST(2 * 60);
+    LOGIN_TIMEOUT_TEST(2 * 60),
 
+    /**
+     * 房间有效时间
+     */
+    ROOM_TIMEOUT(5 * 60);
+    
     private Integer value;
 }

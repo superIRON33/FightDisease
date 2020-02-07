@@ -1,7 +1,5 @@
 package com.disease.demo.common.utils;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.disease.demo.model.entity.HttpPojo;
 
 import java.io.BufferedReader;

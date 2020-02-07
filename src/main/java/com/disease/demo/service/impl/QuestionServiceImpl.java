@@ -28,15 +28,16 @@ public class QuestionServiceImpl implements QuestionService {
     public ResultDTO getQuestion() {
         
         Map<String, Map<String, String>> returnMap = new HashMap<>();
-        for (int i = 0; i < 6; i++) {
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < 15; i++) {
             Optional<Question> question = questionMapper.findQuestion();
-            Set<Integer> set = new HashSet<>();
             if (question.isPresent()) {
                 if (set.contains(question.get().getId())) {
                     i--;
                 }
                 else {
                     set.add(question.get().getId());
+                    System.out.println(question.get().getId());
                     String a = question.get().getAOption(), b = question.get().getBOption(),
                             c = question.get().getCOption(), d = question.get().getDOption();
                     Map<String, String> map = new HashMap<>();
