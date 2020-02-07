@@ -2,7 +2,6 @@ package com.disease.demo.controller;
 
 import com.disease.demo.model.dto.ResultDTO;
 import com.disease.demo.service.UserService;
-import com.disease.demo.service.base.ScheduledTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,14 +17,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-//    @Autowired
-//    private ScheduledTask scheduledTask;
-    
     @GetMapping(value = "/userInfo")
     public ResultDTO getUserInfo(@RequestParam Integer id,
-                                 @RequestParam String encryptedData,
-                                 @RequestParam String iv,
-                                 @RequestParam String session) {
+                                 @RequestParam(required = false) String encryptedData,
+                                 @RequestParam(required = false) String iv,
+                                 @RequestParam(required = false) String session) {
     
         return userService.getUserInfo(id, encryptedData, iv, session);
     }

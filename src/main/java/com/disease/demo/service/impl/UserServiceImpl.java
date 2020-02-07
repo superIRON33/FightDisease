@@ -1,12 +1,10 @@
 package com.disease.demo.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.disease.demo.common.enums.ResultEnum;
 import com.disease.demo.common.enums.VariableEnum;
-import com.disease.demo.common.utils.DXDiseaseStatisticUtil;
 import com.disease.demo.mapper.CityMapper;
 import com.disease.demo.mapper.UserMapper;
+import com.disease.demo.model.dto.CityDTO;
 import com.disease.demo.model.dto.HonorDTO;
 import com.disease.demo.model.dto.ResultDTO;
 import com.disease.demo.model.dto.HomeDTO;
@@ -38,9 +36,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResultDTO getUserInfo(Integer id, String encryptedData, String iv, String session) {
+        
         Optional<User> user = userMapper.findUserById(id);
         if (user.isPresent()) {
-            Integer integral = user.get().getIntegral(), newStepNumber = wxStepNumber.getStepNumber(encryptedData, iv, session);
+            Integer integral = user.get().getIntegral(), newStepNumber = 0;
+            if (encryptedData != null && iv != null && session != null) {
+                newStepNumber = wxStepNumber.getStepNumber(encryptedData, iv, session);
+            }
             userMapper.updateStepNumber(user.get().getId(), newStepNumber);
             HomeDTO homeDTO = new HomeDTO(newStepNumber, integral);
             ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
@@ -52,16 +54,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResultDTO getEpidemic(String cityName) {
-        Optional<City> city = cityMapper.getCount(cityName);
+        
+        Optional<City> city = cityMapper.findCity("%" + cityName + "%");
         if (city.isPresent()) {
             ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
-            resultDTO.setData(city.get().getCount());
+            resultDTO.setData(new CityDTO(city.get().getName(), city.get().getCount()));
             return resultDTO;
         } else {
             return new ResultDTO(ResultEnum.CITY_INVALID);
         }
     }
-
     
     @Override
     public ResultDTO updateIntegral(Integer id, Integer integral, Integer mode) {

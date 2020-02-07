@@ -4,7 +4,6 @@ import com.disease.demo.model.entity.City;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,8 +19,11 @@ public interface CityMapper {
     Integer updateCount(@Param("name") String name, @Param("count") String count);
 
     @Select("SELECT * FROM city WHERE name = #{name}")
-    Optional<City> getCount(@Param("name") String name);
+    Optional<City> getCity(@Param("name") String name);
 
     @Insert("INSERT INTO city(name, count) VALUES(#{name}, #{count})")
     Integer addCity(City city);
+    
+    @Select("SELECT * FROM city WHERE name like #{name}")
+    Optional<City> findCity(@Param("name") String name);
 }

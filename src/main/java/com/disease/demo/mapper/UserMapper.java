@@ -120,7 +120,7 @@ public interface UserMapper {
      * @auther: wjy
      * @date: 2020/2/4 20:30
      */
-    @Select("SELECT COUNT(id) FROM user WHERE step_number > #{step_number}")
+    @Select("SELECT COUNT(id) FROM user WHERE step_number > #{step_number} AND step_number != 0")
     Integer findStepNumberOver(@Param("step_number") Integer stepNumber);
 
     /**

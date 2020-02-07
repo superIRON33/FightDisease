@@ -27,7 +27,7 @@ public class ScheduledTask {
     
     @Autowired
     private UserMapper userMapper;
-
+    
     @Autowired
     private CityMapper cityMapper;
     
@@ -39,8 +39,7 @@ public class ScheduledTask {
         Integer status = userMapper.updateDays();
         if (status.equals(VariableEnum.OK.getValue())) {
             log.info("更新登录天数失败/没有满足的用户");
-        }
-        else {
+        } else {
             log.info("更新登录天数成功");
         }
     }
@@ -69,8 +68,7 @@ public class ScheduledTask {
         Integer status = userMapper.initializeSingleIntegral();
         if (status.equals(VariableEnum.OK.getValue())) {
             log.info("初始化单人模式积分失败/没有满足的用户");
-        }
-        else {
+        } else {
             log.info("初始化单人模式积分成功");
         }
     }
@@ -83,8 +81,7 @@ public class ScheduledTask {
         Integer status = userMapper.initializeIntegralLogin();
         if (status.equals(VariableEnum.OK.getValue())) {
             log.info("初始化integralLogin失败/没有满足的用户");
-        }
-        else {
+        } else {
             log.info("初始化integralLogin成功");
         }
     }
@@ -97,8 +94,7 @@ public class ScheduledTask {
         Integer status = userMapper.initializeIntegralShare();
         if (status.equals(VariableEnum.OK.getValue())) {
             log.info("初始化integralShare失败/没有满足的用户");
-        }
-        else {
+        } else {
             log.info("初始化integralShare成功");
         }
     }
@@ -111,16 +107,15 @@ public class ScheduledTask {
         Integer status = userMapper.initializeStepNumber();
         if (status.equals(VariableEnum.OK.getValue())) {
             log.info("初始化今日步数失败/没有满足的用户");
-        }
-        else {
+        } else {
             log.info("初始化今日步数成功");
         }
     }
-
+    
     @Transactional(rollbackOn = Exception.class)
     @Scheduled(cron = "0 0 6,16 * * ?")
     public void updateCityConfirmedCount() {
-
+        
         String result = DXDiseaseStatisticUtil.getAreaStat();
         JSONArray array = JSONArray.parseArray(result);
         Map<String, String> map = new HashMap<>();
@@ -134,11 +129,11 @@ public class ScheduledTask {
                 map.put(city.getString("cityName"), city.getString("confirmedCount"));
             }
         }
-
+        
         Iterator<Map.Entry<String, String>> entries = map.entrySet().iterator();
         while (entries.hasNext()) {
             Map.Entry<String, String> entry = entries.next();
-            Optional<City> city = cityMapper.getCount(entry.getKey());
+            Optional<City> city = cityMapper.getCity(entry.getKey());
             if (city.isPresent()) {
                 cityMapper.updateCount(entry.getKey(), entry.getValue());
             } else {
