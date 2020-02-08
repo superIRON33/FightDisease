@@ -41,13 +41,14 @@ public class UserServiceImpl implements UserService {
         if (user.isPresent()) {
             Integer integral = user.get().getIntegral(), newStepNumber = 0;
             if (encryptedData != null && iv != null && session != null) {
-                newStepNumber = wxStepNumber.getStepNumber(encryptedData, iv, session);
+                return wxStepNumber.getStepNumber(user, encryptedData, iv, session, integral);
             }
-            userMapper.updateStepNumber(user.get().getId(), newStepNumber);
-            HomeDTO homeDTO = new HomeDTO(newStepNumber, integral);
-            ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
-            resultDTO.setData(homeDTO);
-            return resultDTO;
+            else {
+                HomeDTO homeDTO = new HomeDTO(newStepNumber, integral);
+                ResultDTO resultDTO = new ResultDTO(ResultEnum.NO_POWER);
+                resultDTO.setData(homeDTO);
+                return resultDTO;
+            }
         }
         return new ResultDTO(ResultEnum.ID_INVALID);
     }

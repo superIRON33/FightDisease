@@ -38,8 +38,10 @@ public class DoubleQuestionServiceImpl implements DoubleQuestionService {
             if (user.get().getIntegral() >= VariableEnum.INTEGRAL_LOWER_LIMIT.getValue()) {
                 String roomNumber = RandomNumberUtil.getCharacter(6);
                 redisOperator.set(roomNumber, "", VariableEnum.ROOM_TIMEOUT.getValue());
+                Map<String, String> map = new HashMap<>();
+                map.put("roomNumber", roomNumber);
                 ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
-                resultDTO.setData(roomNumber);
+                resultDTO.setData(map);
                 return resultDTO;
             }
             return new ResultDTO(ResultEnum.INTEGRAL_NOT_ENOUGH);

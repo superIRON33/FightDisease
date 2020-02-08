@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-com\disease\demo\common\interceptor\LoginInterceptor.class
-com\disease\demo\common\interceptor\WebConfigurer.class
-=======
 com\disease\demo\common\enums\VariableEnum.class
 com\disease\demo\service\impl\WXLoginServiceImpl.class
 com\disease\demo\service\base\RedisOperator.class
@@ -40,4 +36,3 @@ com\disease\demo\model\dto\HeadquarterListDTO.class
 com\disease\demo\mapper\HeadquarterMapper.class
 com\disease\demo\service\QuestionService.class
 com\disease\demo\model\dto\HeadquarterDTO.class
->>>>>>> 730e68b9a0d9b72b4d69fc7d8d174c5152c6040e

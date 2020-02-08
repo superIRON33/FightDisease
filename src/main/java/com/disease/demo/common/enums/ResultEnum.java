@@ -65,7 +65,12 @@ public enum ResultEnum {
     /**
      * 没有返回结果
      */
-    NO_RETURN(20009, "没有返回结果");
+    NO_RETURN(20009, "没有返回结果"),
+    
+    /**
+     * 没有权限
+     */
+    NO_POWER(20010, "没有权限");
     
     private Integer code;
     
