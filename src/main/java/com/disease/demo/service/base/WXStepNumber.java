@@ -46,7 +46,7 @@ public class WXStepNumber {
                 System.out.println(userInfo);
                 JSONObject jsonObject = JSONObject.parseObject(userInfo);
                 JSONArray stepArray = jsonObject.getJSONArray("stepInfoList");
-                JSONObject today = (JSONObject) stepArray.get(0);
+                JSONObject today = (JSONObject) stepArray.get(30);
                 Integer stepNumber = today.getInteger("step");
                 log.info("今日步数: " + stepNumber.toString());
                 userMapper.updateStepNumber(user.get().getId(), stepNumber);
