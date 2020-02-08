@@ -9,7 +9,6 @@ import com.disease.demo.model.entity.User;
 import com.disease.demo.service.DoubleQuestionService;
 import com.disease.demo.service.base.RedisOperator;
 import net.sf.json.JSONObject;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,11 +36,8 @@ public class DoubleQuestionServiceImpl implements DoubleQuestionService {
         Optional<User> user = userMapper.findUserById(id);
         if (user.isPresent()) {
             if (user.get().getIntegral() >= VariableEnum.INTEGRAL_LOWER_LIMIT.getValue()) {
-                // 这里改成通过uuid获取，防止房间号重复。
-                String roomNumber = RandomNumberUtil.getNumber(6);
-                Map<String, String> map = new HashMap<>();
-                map.put("A", id.toString());
-                redisOperator.set(roomNumber, map.toString(), VariableEnum.ROOM_TIMEOUT.getValue());
+                String roomNumber = RandomNumberUtil.getCharacter(6);
+                redisOperator.set(roomNumber, "", VariableEnum.ROOM_TIMEOUT.getValue());
                 ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
                 resultDTO.setData(roomNumber);
                 return resultDTO;
@@ -53,20 +49,24 @@ public class DoubleQuestionServiceImpl implements DoubleQuestionService {
     
     @Override
     public ResultDTO enterRoom(Integer id, String roomNumber) {
-        
+    
         Optional<User> user = userMapper.findUserById(id);
         if (user.isPresent()) {
             if (user.get().getIntegral() >= VariableEnum.INTEGRAL_LOWER_LIMIT.getValue()) {
                 if (redisOperator.hasKey(roomNumber)) {
-                    String string = redisOperator.getValue(roomNumber);
-                    Map<String, String> toMap = JSONObject.fromObject(string);
-                    toMap.put("B", id.toString());
-                    redisOperator.set(roomNumber, toMap.toString(), VariableEnum.ROOM_TIMEOUT.getValue());
-                    Map<String, String> map = new HashMap<>();
-                    map.put("name", user.get().getName());
-                    map.put("avatar", user.get().getAvatar());
+                    String b_roomNumber = RandomNumberUtil.getCharacter(6);
+                    JSONObject json1 = new JSONObject();
+                    JSONObject json2 = new JSONObject();
+                    json1.put("roomNumber", roomNumber);
+                    json2.put("roomNumber", b_roomNumber);
+                    redisOperator.set(b_roomNumber, json1.toString(), VariableEnum.ROOM_TIMEOUT.getValue());
+                    redisOperator.set(roomNumber, json2.toString(), VariableEnum.ROOM_TIMEOUT.getValue());
+                    Map<String, String> returnMap = new HashMap<>();
+                    returnMap.put("name", user.get().getName());
+                    returnMap.put("avatar", user.get().getAvatar());
+                    returnMap.put("roomNumber", b_roomNumber);
                     ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
-                    resultDTO.setData(map);
+                    resultDTO.setData(returnMap);
                     return resultDTO;
                 }
                 return new ResultDTO(ResultEnum.ROOM_NUMBER_IS_INVALID);
@@ -83,17 +83,38 @@ public class DoubleQuestionServiceImpl implements DoubleQuestionService {
         if (user.isPresent()) {
             if (redisOperator.hasKey(roomNumber)) {
                 String s = redisOperator.getValue(roomNumber);
-                Map<String, String> toMap = JSONObject.fromObject(s);
-                if (toMap.get("A").equals(id)) {
-                    toMap.put("Acount", count.toString());
+                System.out.println(s);
+                JSONObject jsonObject1 = JSONObject.fromObject(s);
+                jsonObject1.put("count", count.toString());
+                redisOperator.set(roomNumber, jsonObject1.toString(), VariableEnum.ROOM_TIMEOUT.getValue());
+                if (!redisOperator.hasKey((String) jsonObject1.get("roomNumber"))) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-                else {
-                    toMap.put("Bcount", count.toString());
+                if (redisOperator.hasKey((String) jsonObject1.get("roomNumber"))) {
+                    int i = 0;
+                    while (!(JSONObject.fromObject(redisOperator.getValue((String) jsonObject1.get("roomNumber")))).containsKey("count") && i < 5) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        i++;
+                    }
+                    JSONObject jsonObject2 = JSONObject.fromObject(redisOperator.getValue((String) jsonObject1.get("roomNumber")));
+                    if (jsonObject2.has("count")) {
+                        ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
+                        resultDTO.setData(jsonObject2.get("count"));
+                        return resultDTO;
+                    }
+                    else {
+                        return new ResultDTO(ResultEnum.NO_RETURN);
+                    }
                 }
-                redisOperator.set(roomNumber, toMap.toString(), VariableEnum.ROOM_TIMEOUT.getValue());
-    
-                ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
-    
+                return new ResultDTO(ResultEnum.ROOM_NUMBER_IS_INVALID);
             }
             return new ResultDTO(ResultEnum.ROOM_NUMBER_IS_INVALID);
         }

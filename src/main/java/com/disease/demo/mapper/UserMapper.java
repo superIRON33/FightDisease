@@ -41,7 +41,6 @@ public interface UserMapper {
     @Select("SELECT * FROM user WHERE openid = #{openid}")
     Optional<User> findUserByOpenid(@Param("openid") String openid);
 
-
     /**
      * 功能描述: 插入用户信息
      *
@@ -53,9 +52,7 @@ public interface UserMapper {
     @Insert("INSERT INTO user(openid, name, avatar) VALUES(#{openid}, #{name}, #{avatar})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     Integer insertNewUser(User user);
-
-
-
+    
     /**
      * 功能描述: 更新指定用户信息
      *

@@ -30,12 +30,12 @@ public enum WechatEnum {
     /**
      * 小程序appid
      */
-    APP_ID("wxd37bb4b8ee0a449a"),
+    APP_ID("wxe10e4242f861ae32"),
     
     /**
      * 小程序secret
      */
-    SECRET("dabc51f1f15f902d56d2b1e27a03cd8a");
+    SECRET("d66231c0a0a39a84120a02e77222bd19");
     
     private String value;
 }

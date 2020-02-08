@@ -35,7 +35,7 @@ public class WXStepNumber {
                 JSONArray stepArray = jsonObject.getJSONArray("stepInfoList");
                 JSONObject today = (JSONObject) stepArray.get(0);
                 Integer stepNumber = today.getInteger("step");
-                log.info(stepNumber.toString());
+                log.info("今日步数: " + stepNumber.toString());
                 return stepNumber;
             }
         }catch (InvalidAlgorithmParameterException e) {

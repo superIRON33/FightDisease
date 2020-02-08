@@ -37,7 +37,6 @@ public class QuestionServiceImpl implements QuestionService {
                 }
                 else {
                     set.add(question.get().getId());
-                    System.out.println(question.get().getId());
                     String a = question.get().getAOption(), b = question.get().getBOption(),
                             c = question.get().getCOption(), d = question.get().getDOption();
                     Map<String, String> map = new HashMap<>();
