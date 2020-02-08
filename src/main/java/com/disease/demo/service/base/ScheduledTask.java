@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.disease.demo.common.enums.VariableEnum;
 import com.disease.demo.common.utils.DXDiseaseStatisticUtil;
 import com.disease.demo.mapper.CityMapper;
+import com.disease.demo.mapper.ProvinceMapper;
 import com.disease.demo.mapper.UserMapper;
 import com.disease.demo.model.entity.City;
+import com.disease.demo.model.entity.Province;
 import com.disease.demo.model.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class ScheduledTask {
     
     @Autowired
     private CityMapper cityMapper;
+
+    @Autowired
+    private ProvinceMapper provinceMapper;
     
     @Transactional(rollbackOn = Exception.class)
     @Scheduled(cron = "0 50 23 * * ?")
@@ -119,9 +124,11 @@ public class ScheduledTask {
         String result = DXDiseaseStatisticUtil.getAreaStat();
         JSONArray array = JSONArray.parseArray(result);
         Map<String, String> map = new HashMap<>();
+        Map<String, String> map1 = new HashMap<>();
         for (int i = 0; i < array.size(); i++) {
             JSONObject jsonObject = JSONObject.parseObject(array.getString(i));
             map.put(jsonObject.getString("provinceName"), jsonObject.getString("confirmedCount"));
+            map1.put(jsonObject.getString("provinceName"), jsonObject.getString("confirmedCount"));
             String cities = jsonObject.getString("cities");
             JSONArray cityList = JSONArray.parseArray(cities);
             for (int j = 0; j < cityList.size(); j++) {
@@ -139,6 +146,18 @@ public class ScheduledTask {
             } else {
                 City city1 = new City(entry.getKey(), entry.getValue());
                 cityMapper.addCity(city1);
+            }
+        }
+
+        Iterator<Map.Entry<String, String>> entries1 = map1.entrySet().iterator();
+        while (entries1.hasNext()) {
+            Map.Entry<String, String> entry = entries1.next();
+            Optional<Province> province = provinceMapper.getProvince(entry.getKey());
+            if (province.isPresent()) {
+                provinceMapper.updateCount(entry.getKey(), entry.getValue());
+            } else {
+                Province province1 = new Province(entry.getKey(), entry.getValue());
+                provinceMapper.addProvince(province1);
             }
         }
     }

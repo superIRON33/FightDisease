@@ -18,4 +18,6 @@ public interface UserService {
     ResultDTO getHonour(Integer id);
     
     ResultDTO updateStatus(Integer id);
+
+    ResultDTO getAllProvince();
 }

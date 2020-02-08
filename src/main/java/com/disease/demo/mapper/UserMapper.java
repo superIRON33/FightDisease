@@ -230,4 +230,5 @@ public interface UserMapper {
      */
     @Update("UPDATE user SET days = days + 1 WHERE integral_login = 1")
     Integer updateDays();
+
 }

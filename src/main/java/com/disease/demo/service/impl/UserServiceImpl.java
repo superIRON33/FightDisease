@@ -3,12 +3,11 @@ package com.disease.demo.service.impl;
 import com.disease.demo.common.enums.ResultEnum;
 import com.disease.demo.common.enums.VariableEnum;
 import com.disease.demo.mapper.CityMapper;
+import com.disease.demo.mapper.ProvinceMapper;
 import com.disease.demo.mapper.UserMapper;
-import com.disease.demo.model.dto.CityDTO;
-import com.disease.demo.model.dto.HonorDTO;
-import com.disease.demo.model.dto.ResultDTO;
-import com.disease.demo.model.dto.HomeDTO;
+import com.disease.demo.model.dto.*;
 import com.disease.demo.model.entity.City;
+import com.disease.demo.model.entity.Province;
 import com.disease.demo.model.entity.User;
 import com.disease.demo.service.UserService;
 import com.disease.demo.service.base.WXStepNumber;
@@ -33,6 +32,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private WXStepNumber wxStepNumber;
+
+    @Autowired
+    private ProvinceMapper provinceMapper;
 
     @Override
     public ResultDTO getUserInfo(Integer id, String encryptedData, String iv, String session) {
@@ -163,5 +165,22 @@ public class UserServiceImpl implements UserService {
             }
         }
         return new ResultDTO(ResultEnum.ID_INVALID);
+    }
+
+    @Override
+    public ResultDTO getAllProvince() {
+        List<Province> list = provinceMapper.getAllProviceCount();
+        List<ProvinceDTO> provinces = new ArrayList<>();
+        if (list.size() != 0) {
+            list.forEach(province -> {
+                ProvinceDTO provinceDTO = new ProvinceDTO(province.getName(), province.getCount());
+                provinces.add(provinceDTO);
+            });
+            ResultDTO resultDTO = new ResultDTO(ResultEnum.SUCCESS);
+            resultDTO.setData(provinces);
+            return resultDTO;
+        } else {
+            return new ResultDTO(ResultEnum.NO_RETURN);
+        }
     }
 }

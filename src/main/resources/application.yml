@@ -9,7 +9,7 @@ spring:
       additional-paths: src/main/java
       enabled: true
   profiles:
-    active: pro
+    active: zbw
 mybatis:
   configuration:
     mapUnderscoreToCamelCase: true
