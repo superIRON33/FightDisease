@@ -50,7 +50,22 @@ public enum ResultEnum {
     /**
      * 删除失败
      */
-    DELETE_FAIL(20006, "删除失败");
+    DELETE_FAIL(20006, "删除失败"),
+    
+    /**
+     * 积分不足
+     */
+    INTEGRAL_NOT_ENOUGH(20007, "积分不足"),
+    
+    /**
+     * 房间号不存在
+     */
+    ROOM_NUMBER_IS_INVALID(20008, "房间号不存在"),
+    
+    /**
+     * 没有返回结果
+     */
+    NO_RETURN(20009, "没有返回结果");
     
     private Integer code;
     

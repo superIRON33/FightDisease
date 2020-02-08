@@ -22,6 +22,6 @@
 //
 //        // addPathPatterns("/**") 表示拦截所有的请求。
 //        // excludePathPatterns("/kjyq/login") 表示登录接口不拦截。
-//        registry.addInterceptor(loginInterceptor).addPathPatterns("/**").excludePathPatterns("/kjyq/login");
+//        registry.addInterceptor(loginInterceptor).addPathPatterns("/**").excludePathPatterns("/kjyq/login").excludePathPatterns("/kjyq/epidemic");
 //    }
 //}
