@@ -21,7 +21,6 @@ import java.util.List;
  * @date: 2020/2/3 21:32
  * @description: 问答表服务层实体类
  */
-@Slf4j
 @Service
 public class HeadquarterServiceImpl implements HeadquarterService {
     

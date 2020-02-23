@@ -85,7 +85,6 @@ public class DoubleQuestionServiceImpl implements DoubleQuestionService {
         if (user.isPresent()) {
             if (redisOperator.hasKey(roomNumber)) {
                 String s = redisOperator.getValue(roomNumber);
-                System.out.println(s);
                 JSONObject jsonObject1 = JSONObject.fromObject(s);
                 jsonObject1.put("count", count.toString());
                 redisOperator.set(roomNumber, jsonObject1.toString(), VariableEnum.ROOM_TIMEOUT.getValue());
